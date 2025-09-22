@@ -33,7 +33,10 @@ export default defineConfig({
   },
   server: {
     hmr: {
-      path: '/__vite_hmr__'
+      path: '/__vite_hmr__',
+      client: {
+        webSocketURL: '/__vite_hmr__'
+      }
     },
     fs: {
       strict: true,
