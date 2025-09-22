@@ -35,7 +35,10 @@ export default defineConfig({
     hmr: {
       path: '/__vite_hmr__',
       client: {
-        webSocketURL: process.env.VITE_WS_URL || '/__vite_hmr__'
+        protocol: 'wss',
+        host: 'location.hostname',
+        port: 5000,
+        path: '/__vite_hmr__'
       }
     },
     fs: {
