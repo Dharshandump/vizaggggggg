@@ -45,7 +45,7 @@ export function useUploadCSV() {
       formData.append('csvFile', file);
       
       // Use custom fetch for FormData (apiRequest doesn't support multipart/form-data)
-      // Use the correct API endpoint for Vercel
+      // Use upload-csv endpoint for file uploads
       const response = await fetch('/api/upload-csv', {
         method: 'POST',
         body: formData,

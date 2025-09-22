@@ -32,15 +32,7 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    hmr: {
-      path: '/__vite_hmr__',
-      client: {
-        protocol: 'wss',
-        host: 'location.hostname',
-        port: 5000,
-        path: '/__vite_hmr__'
-      }
-    },
+    hmr: false, // Disable HMR to avoid WebSocket conflicts
     fs: {
       strict: true,
       deny: ["**/.*"],

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 interface TrafficUpdate {
   location: string;
@@ -23,6 +23,7 @@ interface WebSocketMessage {
   data?: TrafficUpdate[] | TrafficAlert;
   message?: string;
   timestamp: string;
+  alert?: TrafficAlert;
 }
 
 export function useRealTimeTraffic() {
@@ -31,10 +32,9 @@ export function useRealTimeTraffic() {
   const [currentUpdates, setCurrentUpdates] = useState<TrafficUpdate[]>([]);
   const [recentAlerts, setRecentAlerts] = useState<TrafficAlert[]>([]);
   const [connectionError, setConnectionError] = useState<string | null>(null);
-  const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
-    // Use polling for Vercel deployment since WebSockets aren't supported
+    // Use polling for both development and production (Vercel compatible)
     let pollInterval: NodeJS.Timeout;
     
     function startPolling() {
@@ -46,7 +46,7 @@ export function useRealTimeTraffic() {
           try {
             const response = await fetch('/api/websocket');
             if (response.ok) {
-              const data = await response.json();
+              const data: WebSocketMessage = await response.json();
               
               if (data.type === 'traffic_update' && Array.isArray(data.data)) {
                 setCurrentUpdates(data.data);
@@ -55,7 +55,7 @@ export function useRealTimeTraffic() {
               
               if (data.alert) {
                 setRecentAlerts(prev => {
-                  const newAlerts = [data.alert, ...prev.slice(0, 4)];
+                  const newAlerts = [data.alert!, ...prev.slice(0, 4)];
                   return newAlerts;
                 });
               }
